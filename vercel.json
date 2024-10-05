@@ -12,11 +12,9 @@
       "dest": "/index.js"
     }
   ],
-
-  "build": {
-
-    "commands": {
-      "build": "prisma generate" 
+  "hooks": {
+    "build": {
+      "command": "prisma generate"
     }
   }
 }
