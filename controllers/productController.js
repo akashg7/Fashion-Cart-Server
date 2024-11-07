@@ -41,6 +41,22 @@ exports.getProductById = async (req, res) => {
   }
 }
 
+
+// app.get('/product/:id', async (req, res) => {
+//   const productId = req.params.id
+
+//   // console.log(productId)
+//   try {
+//     const product = await prisma.products.findUnique({where : {id : +productId} });
+//     // console.log('Retrieved product:', product); // Log the retrieved product
+//     res.json(product);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'An error occurred while fetching product.' });
+//   }
+// });
+
+
 // Get products by category
 exports.getProductsByCategory = async (req, res) => {
   const productCategory = req.params.categorytype
