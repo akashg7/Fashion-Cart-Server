@@ -49,6 +49,35 @@ app.get('/search', productController.searchProducts);
 app.post('/product/:id/addtocart', cartController.addToCart); // Adding product to cart
 app.post('/cart', cartController.showCart); // getting user's cart
 
+
+app.delete('/product/:id', async (req, res) => {
+  const { id } = req.params; 
+
+  try {
+    // Attempt to delete the product by its ID
+    const deletedProduct = await prisma.products.delete({
+      where: {
+        id: parseInt(id), // Ensure the ID is an integer if it's stored as INT in your database
+      },
+    });
+
+    // Send a success response
+    res.status(200).json({
+      message: 'Product deleted successfully',
+      deletedProduct, // Optionally return the deleted product details
+    });
+  } catch (error) {
+    
+    if (error.code === 'P2025') { // P2025 is Prisma's "Record to delete does not exist" error code
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    
+    res.status(500).json({ message: 'An error occurred while deleting the product', error });
+  }
+});
+
+
+
 //checkout
 app.post('/create-payment-intent', paymentController.createPaymentIntent) 
 
