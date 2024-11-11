@@ -77,6 +77,39 @@ app.delete('/product/:id', async (req, res) => {
 });
 
 
+app.put('/product/:id', async (req, res) => {
+  const { id } = req.params; 
+  const { title, price, description, category } = req.body; 
+
+  try {
+    
+    const updatedProduct = await prisma.products.update({
+      where: {
+        id: parseInt(id), 
+      },
+      data: {
+        title,
+        price,
+        description,
+        category,
+      },
+    });
+
+    
+    res.status(200).json({
+      message: 'Product updated successfully',
+      updatedProduct, 
+    });
+  } catch (error) {
+    
+    if (error.code === 'P2025') { // P2025 is Prisma's "Record to update does not exist" error code
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    // Other errors
+    res.status(500).json({ message: 'An error occurred while updating the product', error });
+  }
+});
+
 
 //checkout
 app.post('/create-payment-intent', paymentController.createPaymentIntent) 
